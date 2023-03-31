@@ -1,0 +1,9 @@
+*.o
+*.elf
+*.bin
+*.hex
+
+initrd.gz
+linux
+
+build/
