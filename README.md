@@ -35,6 +35,7 @@ Table of Content
   - [Write a `Hello World!` program](#-write-a-hello-world-program)
   - [Debug the program](#-debug-the-program)
   - [Step debugging into Glibc](#-step-debugging-into-glibc)
+- [VSCode remote development](#-vscode-remote-development)
 
 <!-- /code_chunk_output -->
 
@@ -430,4 +431,37 @@ main () at args.c:6
 6           return 0;
 ```
 
-As the above output shows, we can now step debugging into the `printf` function.
+As the output shows, we can now step debugging into the `printf` function.
+
+## VSCode remote development
+
+Unlike the virtualization software such as VirtualBox and VMWare, QEMU emulates different architecture processors through software to process computing, while the virtualization software processes computing directly with the host's physical CPU, so the computing performance of QEMU is much lower than the virtualization software. It is not so feasible to run a graphical desktop environment in a QEMU virtual system.
+
+But fortunately we can enjoy the convenience of graphical development tools through VSCode's remote development feature.
+
+First add a host record to the host SSH configuration file `~/.ssh/config`, e.g.
+
+```config
+Host arm64
+    HostName    localhost
+    Port        6422
+    User        yang
+```
+
+Replace "yang" above with your new non-privileged user name, then boot the QEMU virtual system we created.
+
+Now open your VSCode and install the extension [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh), and then press `Shift+Ctrl+P` to open the command palette, and select `Remote SSH - Connect to Host...`
+
+![Connect to Host](./images/connect-to-host.png)
+
+VSCode will start installing the server side software into the virtual system once you enter the correct login password.
+
+![Install VSCode Server](./images/install-vscode-server.png)
+
+Some essential extensions should be installed as well as into the virtual system, such as [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)
+
+Now let's open a folder (which is inside the virtual system) and create a "Hello World!" C source file `main.c`, try to set a break point and start debugging it.
+
+![Remote debugging](./images/remote-debugging.png)
+
+You can step debugging and check out the registers and memory, all these things are happening inside the virtual system, it's pretty cool.
